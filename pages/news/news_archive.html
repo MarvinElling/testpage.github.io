@@ -8,6 +8,7 @@ folder: news
 ---
 
 <div class="home">
+    <button id="triggerButton">Create Issue</button>
 
     <div class="post-list">
 
@@ -33,3 +34,37 @@ folder: news
     <hr/>
     </div>
 </div>
+
+
+<script>
+document.getElementById('triggerButton').addEventListener('click', function() {
+    const url = 'https://api.github.com/repos/MarvinElling/aec.github.io/issues';
+
+    // You need to set the pat variable in a secure way
+    const pat = 'your_pat_here';
+    const headers = {
+        'Authorization': `token ${pat}`,
+        'Content-Type': 'application/json'
+    };
+
+    const data = {
+        'title': 'Test Issue LOOL',
+        'body': 'This is a test issue',
+    };
+
+    fetch(url, {
+        method: 'POST',
+        headers: headers,
+        body: JSON.stringify(data)
+    })
+    .then(response => {
+        if (response.status === 201) {
+            return response.json();
+        } else {
+            throw new Error(`Failed to create issue, status code: ${response.status}`);
+        }
+    })
+    .then(data => console.log(data))
+    .catch(error => console.error(error));
+});
+</script>
